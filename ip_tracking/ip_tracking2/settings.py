@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'ip_tracking',
+    'ratelimit',
 ]
 
 MIDDLEWARE = [
@@ -51,7 +52,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ip_tracking.urls'
+ROOT_URLCONF = 'ip_tracking2.urls'
 
 TEMPLATES = [
     {
@@ -68,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ip_tracking.wsgi.application'
+WSGI_APPLICATION = 'ip_tracking2.wsgi.application'
 
 
 # Database
@@ -81,6 +82,20 @@ DATABASES = {
     }
 }
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake'
+    }
+}
+
+RATELIMIT_USE_CACHE = 'default'  
+
+# Limits
+RATE_LIMITS = {
+    "AUTHENTICATED": "10/m",  # 10 requests per minute for logged-in users
+    "ANONYMOUS": "5/m",       # 5 requests per minute for non-logged-in users
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
